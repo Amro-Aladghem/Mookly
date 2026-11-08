@@ -2,6 +2,8 @@ namespace Domain.Enums
 {
     public enum eAgentType
     {
-        LoggingAgent = 1,
+        InterviewerAgent = 1,
+        User=2,
+        Tool=3
     }
 }
