@@ -1,14 +1,28 @@
-var builder = WebApplication.CreateBuilder(args);
+using Infrastructure.ExternalServices.Interfaces;
+using Infrastructure.ExternalServices.Services;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<ISpeechToTextService, WhisperService>();
+builder.Services.AddScoped<ITextToSpeechService,PiperService>();
+
+builder.Services.AddHttpClient<WhisperService>(client =>
+{
+    client.BaseAddress = new Uri($"{builder.Configuration["Whisper:Uri"]}:{builder.Configuration["Whisper:Port"]}");
+    client.Timeout = TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("Whisper:TimeOut"));
+});
+
+builder.Services.AddHttpClient<PiperService>(client =>
+{
+    client.BaseAddress = new Uri($"{builder.Configuration["Piper:Uri"]}:{builder.Configuration["Piper:Port"]}");
+    client.Timeout = TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("Piper:TimeOut"));
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

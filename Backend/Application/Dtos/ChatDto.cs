@@ -14,5 +14,6 @@ namespace Application.Dtos
         public string? AgentType { get; set; }
         public bool ShowMessage { get; set; } = false;
         public bool IsFinalResponse { get; set; } = false;
+        public string? MessageAsAudioLink { get; set; } = null;
     }
 }

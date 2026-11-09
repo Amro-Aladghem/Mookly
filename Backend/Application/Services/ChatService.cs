@@ -31,7 +31,8 @@ namespace Application.Services
                 Data = dto.Data,
                 AgentType = string.IsNullOrWhiteSpace(dto.AgentType) ? null : Enum.Parse<eAgentType>(dto.AgentType, true),
                 ShowMessage = dto.ShowMessage,
-                IsFinished = dto.IsFinalResponse
+                IsFinished = dto.IsFinalResponse,
+                MessageAsAudioLink= dto.MessageAsAudioLink,
             };
 
             _context.Chats.Add(chat);

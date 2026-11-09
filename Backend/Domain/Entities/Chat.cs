@@ -19,6 +19,7 @@ namespace Domain.Entities
         public eAgentType? AgentType { get; set; }
         public bool ShowMessage { get; set; } = false;
         public bool IsFinished { get; set; } = false;
+        public string? MessageAsAudioLink { get; set; } = null;
 
         public ChatRole ChatRole { get; set; } = null!;
         public User User { get; set; } = null!;
