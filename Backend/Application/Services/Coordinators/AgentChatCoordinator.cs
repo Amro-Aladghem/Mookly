@@ -26,7 +26,7 @@ namespace Application.Services.Coordinators
                 if (agentResponseDto is null)
                     return null;
 
-                string? agentMessageAsAudioLink = await HandleConvertAgentMessageAsAudioIfNeeded(agentResponseDto);
+                string? agentMessageAsAudioLink = null; //await HandleConvertAgentMessageAsAudioIfNeeded(agentResponseDto);
 
                 ChatDto chatDto = await _chatService.CreateChat(userId, new ChatDto()
                 {

@@ -1,12 +1,30 @@
+using Application.Dtos;
+using Application.Tools;
+using Application.Tools.Interfaces;
+using Infrastructure.Backgroundworkers;
+using Infrastructure.Data;
 using Infrastructure.ExternalServices.Interfaces;
 using Infrastructure.ExternalServices.Services;
+using Microsoft.EntityFrameworkCore;
+using Mscc.GenerativeAI;
+using Mscc.GenerativeAI.Types;
+using System.Reflection;
+using System.Threading.Channels;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddDbContext<AppDbContext>(context =>
+    context.UseNpgsql(builder.Configuration["SQL_CONNECTION_STRING"]));
+
+builder.Services.AddSingleton<GoogleAI>(sp => new GoogleAI(apiKey: builder.Configuration["geminiApi"]!));
+builder.Services.AddSingleton<GenerationConfig>(gc => new GenerationConfig() { ResponseMimeType = "application/json", Temperature = 0 });
+
+builder.Services.AddSingleton<Channel<AgentRequestDto>>(
+    _ => Channel.CreateUnbounded<AgentRequestDto>()
+);
 
 builder.Services.AddScoped<ISpeechToTextService, WhisperService>();
-builder.Services.AddScoped<ITextToSpeechService,PiperService>();
+builder.Services.AddScoped<ITextToSpeechService, PiperService>();
 
 builder.Services.AddHttpClient<WhisperService>(client =>
 {
@@ -20,9 +38,45 @@ builder.Services.AddHttpClient<PiperService>(client =>
     client.Timeout = TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("Piper:TimeOut"));
 });
 
-var app = builder.Build();
+var applicationAssembly = typeof(IAgentTool).Assembly;
+var infrastructureAssembly = typeof(AppDbContext).Assembly;
 
-//app.UseHttpsRedirection();
+var serviceNamespaces = new (Assembly Assembly, string Namespace)[]
+{
+    (applicationAssembly, "Application.Services"),
+    (applicationAssembly, "Application.Services.Coordinators"),
+    (applicationAssembly, "Application.Agents"),
+    (applicationAssembly, "Application.Tools"),
+    (applicationAssembly, "Application.Tools.Coordinator"),
+    (infrastructureAssembly, "Infrastructure.AI.Chat"),
+    (infrastructureAssembly, "Infrastructure.ExternalServices"),
+};
+
+foreach (var (assembly, targetNamespace) in serviceNamespaces)
+{
+    var serviceTypes = assembly.GetTypes()
+        .Where(type => type.IsClass && !type.IsAbstract && type.Namespace == targetNamespace);
+
+    foreach (var serviceType in serviceTypes)
+        builder.Services.AddScoped(serviceType);
+}
+
+var toolTypes = applicationAssembly.GetTypes()
+    .Where(type => type.IsClass && !type.IsAbstract && typeof(IAgentTool).IsAssignableFrom(type));
+
+foreach (var toolType in toolTypes)
+{
+    builder.Services.AddScoped(toolType);
+    builder.Services.AddScoped(typeof(IAgentTool), provider => provider.GetRequiredService(toolType));
+}
+
+builder.Services.AddScoped<ToolExecutor>();
+builder.Services.AddHostedService<AgentBackgroundWorker>();
+
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+
+var app = builder.Build();
 
 app.UseAuthorization();
 
