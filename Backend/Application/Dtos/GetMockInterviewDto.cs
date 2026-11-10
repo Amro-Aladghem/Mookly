@@ -3,7 +3,7 @@ namespace Application.Dtos
     public class GetMockInterviewDto
     {
         public Guid? Id { get; set; }
-        public Guid ChatId { get; set; }
+        public string ChatSignture { get; set; } = null!;
         public Guid UserId { get; set; }
         public string MockInterviewType { get; set; } = null!;
         public string Status { get; set; } = "Scheduled";

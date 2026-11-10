@@ -15,7 +15,7 @@ namespace CarDealer.ContextFactory
 
             var builder = new DbContextOptionsBuilder<AppDbContext>()
             .UseNpgsql(configuration.GetSection("SQL_CONNECTION_STRING").Value,
-            b => b.MigrationsAssembly("TraceMindApi"));
+            b => b.MigrationsAssembly("MooklyApi"));
 
             return new AppDbContext(builder.Options);
         }

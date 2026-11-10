@@ -15,13 +15,13 @@ namespace Application.Services
             _context = context;
         }
 
-        public async Task<CanvaDto?> AddCanva(Guid userId, Guid chatId, CanvaDto dto)
+        public async Task<CanvaDto?> AddCanva(Guid userId, string chatSignture, CanvaDto dto)
         {
             var canva = new Canva
             {
                 Id = Guid.NewGuid(),
                 UserId = userId,
-                ChatId = chatId,
+                ChatSignture = chatSignture,
                 Content = dto.Content,
                 IsSolved = dto.IsSolved,
                 UserAnswer = dto.UserAnswer,
@@ -74,10 +74,10 @@ namespace Application.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<CanvaDto>> GetCanvasForChatId(Guid userId, Guid chatId)
+        public async Task<List<CanvaDto>> GetCanvasForChatSignture(Guid userId, string chatSignture)
         {
             return await _context.Canvas
-                .Where(c => c.UserId == userId && c.ChatId == chatId)
+                .Where(c => c.UserId == userId && c.ChatSignture == chatSignture)
                 .Select(c => ToDto(c))
                 .ToListAsync();
         }
@@ -88,7 +88,7 @@ namespace Application.Services
             {
                 Id = c.Id,
                 UserId = c.UserId,
-                ChatId = c.ChatId,
+                ChatSignture = c.ChatSignture,
                 Content = c.Content,
                 IsSolved = c.IsSolved,
                 UserAnswer = c.UserAnswer,

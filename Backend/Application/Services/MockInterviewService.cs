@@ -15,18 +15,19 @@ namespace Application.Services
             _context = context;
         }
 
-        public async Task<MockInterviewDto?> CreateMockInterview(Guid userId, Guid chatId, CreateMockInterviewDto dto)
+        public async Task<MockInterviewDto?> CreateMockInterview(Guid userId, string chatSignture, CreateMockInterviewDto dto)
         {
             var mockInterview = new MockInterview
             {
                 Id = Guid.NewGuid(),
-                ChatId = chatId,
+                ChatSignture = chatSignture,
                 UserId = userId,
                 MockInterviewTypeId = dto.MockInterviewTypeId,
                 eMockInterviewStatus = eMockInterviewStatus.Scheduled,
                 JobTypeId = dto.JobTypeId,
                 JobLevelId = dto.JobLevelId,
-                About = dto.About
+                About = dto.About,
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.MockInterviews.Add(mockInterview);
@@ -50,14 +51,14 @@ namespace Application.Services
             return ToDto(mockInterview);
         }
 
-        public async Task<GetMockInterviewDto?> GetMockInterviewByChatId(Guid userId, Guid chatId)
+        public async Task<GetMockInterviewDto?> GetMockInterviewByChatSignture(Guid userId, string chatSignture)
         {
             return await _context.MockInterviews
-                .Where(m => m.UserId == userId && m.ChatId == chatId)
+                .Where(m => m.UserId == userId && m.ChatSignture == chatSignture)
                 .Select(m => new GetMockInterviewDto
                 {
                     Id = m.Id,
-                    ChatId = m.ChatId,
+                    ChatSignture = m.ChatSignture,
                     UserId = m.UserId,
                     MockInterviewType = m.MockInterviewType.Description == null || m.MockInterviewType.Description == ""
                         ? m.MockInterviewType.Title
@@ -77,7 +78,7 @@ namespace Application.Services
                 .Select(m => new GetMockInterviewDto
                 {
                     Id = m.Id,
-                    ChatId = m.ChatId,
+                    ChatSignture = m.ChatSignture,
                     UserId = m.UserId,
                     MockInterviewType = m.MockInterviewType.Description == null || m.MockInterviewType.Description == ""
                         ? m.MockInterviewType.Title
@@ -90,12 +91,33 @@ namespace Application.Services
                 .ToListAsync();
         }
 
+        public async Task<GetMockInterviewDto?> GetLastMockInterview(Guid userId)
+        {
+            return await _context.MockInterviews
+                .Where(m => m.UserId == userId)
+                .OrderByDescending(m => m.CreatedAt)
+                .Select(m => new GetMockInterviewDto
+                {
+                    Id = m.Id,
+                    ChatSignture = m.ChatSignture,
+                    UserId = m.UserId,
+                    MockInterviewType = m.MockInterviewType.Description == null || m.MockInterviewType.Description == ""
+                        ? m.MockInterviewType.Title
+                        : m.MockInterviewType.Title + " - " + m.MockInterviewType.Description,
+                    Status = m.eMockInterviewStatus.ToString(),
+                    JobType = m.JobType == null ? null : m.JobType.Name,
+                    JobLevel = m.JobLevel == null ? null : m.JobLevel.Name,
+                    About = m.About
+                })
+                .FirstOrDefaultAsync();
+        }
+
         private static MockInterviewDto ToDto(MockInterview m)
         {
             return new MockInterviewDto
             {
                 Id = m.Id,
-                ChatId = m.ChatId,
+                ChatSignture = m.ChatSignture,
                 UserId = m.UserId,
                 MockInterviewTypeId = m.MockInterviewTypeId,
                 Status = m.eMockInterviewStatus.ToString(),

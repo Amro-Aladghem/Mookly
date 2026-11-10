@@ -20,7 +20,7 @@ namespace Application.Tools.Chats
         {
             CreateChatToolArg createChatToolArg = (CreateChatToolArg)arg;
 
-            return await ExecuteTool<ChatDto?>(() =>
+            return await ExecuteTool<ChatDto>(() =>
                 _chatService.CreateChat(createChatToolArg.userId, createChatToolArg.chatDto), Name);
         }
     }

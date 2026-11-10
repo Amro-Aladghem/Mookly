@@ -21,14 +21,14 @@ namespace Application.Tools.Canvas
             AddCanvaToolArg addCanvaToolArg = (AddCanvaToolArg)arg;
 
             return await ExecuteTool<CanvaDto?>(() =>
-                _canvaService.AddCanva(addCanvaToolArg.userId, addCanvaToolArg.chatId, addCanvaToolArg.canvaDto), Name);
+                _canvaService.AddCanva(addCanvaToolArg.userId, addCanvaToolArg.chatSignture, addCanvaToolArg.canvaDto), Name);
         }
     }
 
     public class AddCanvaToolArg()
     {
         public Guid userId { get; set; }
-        public Guid chatId { get; set; }
+        public string chatSignture { get; set; } = null!;
         public CanvaDto canvaDto { get; set; } = null!;
     }
 }

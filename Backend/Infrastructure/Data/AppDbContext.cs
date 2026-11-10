@@ -63,6 +63,7 @@ namespace Infrastructure.Data
         public DbSet<JobLevel> JobLevels => Set<JobLevel>();
         public DbSet<JobType> JobTypes => Set<JobType>();
         public DbSet<MockInterview> MockInterviews => Set<MockInterview>();
+        public DbSet<MockInterviewResult> MockInterviewResults => Set<MockInterviewResult>();
         public DbSet<MockInterviewType> MockInterviewTypes => Set<MockInterviewType>();
         public DbSet<User> Users => Set<User>();
     }

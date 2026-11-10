@@ -21,14 +21,14 @@ namespace Application.Tools.MockInterviews
             CreateMockInterviewToolArg createMockInterviewToolArg = (CreateMockInterviewToolArg)arg;
 
             return await ExecuteTool<MockInterviewDto?>(() =>
-                _mockInterviewService.CreateMockInterview(createMockInterviewToolArg.userId, createMockInterviewToolArg.chatId, createMockInterviewToolArg.createMockInterviewDto), Name);
+                _mockInterviewService.CreateMockInterview(createMockInterviewToolArg.userId, createMockInterviewToolArg.chatSignture, createMockInterviewToolArg.createMockInterviewDto), Name);
         }
     }
 
     public class CreateMockInterviewToolArg()
     {
         public Guid userId { get; set; }
-        public Guid chatId { get; set; }
+        public string chatSignture { get; set; } = null!;
         public CreateMockInterviewDto createMockInterviewDto { get; set; } = null!;
     }
 }
