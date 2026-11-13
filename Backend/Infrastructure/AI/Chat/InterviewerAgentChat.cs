@@ -20,12 +20,12 @@ namespace Infrastructure.AI.Chat
             _googleAI = googleAI;
             _generationConfiq = generationConfig;
 
-            _model = _googleAI.GenerativeModel(model: Model.Gemini25FlashLite);
+            _model = _googleAI.GenerativeModel(model: Model.Gemini25Flash);
         }
 
         private readonly static Content InterviewerAgentSysPrompt = new Content(File.ReadAllText(
              Path.Combine(AppContext.BaseDirectory, "Resources", "InterviewerAgentSysPrompt.txt")
-         ));
+        )); 
 
         public async Task<string?> Chat(Guid inventoryId, object? messagesContext)
         {
@@ -38,7 +38,7 @@ namespace Infrastructure.AI.Chat
             return response.Text;
         }
 
-        private string CreateFormatedPrompt(object? messagesContext, Guid userId)
+        private string CreateFormatedPrompt(object? messagesContext, Guid userId) 
         {
             string messagesContextAsString = "There is no previous context yet";
 

@@ -10,5 +10,6 @@ namespace Application.Dtos
         public string? JobType { get; set; }
         public string? JobLevel { get; set; }
         public string About { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
     }
 }

@@ -1,75 +1,42 @@
-# React + TypeScript + Vite
+# Mookly Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+واجهة عربية (RTL) لمقابلات تدريبية ذكية مع مدرب افتراضي.
 
-Currently, two official plugins are available:
+## التشغيل
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+الواجهة تعمل افتراضياً على `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## إعدادات البيئة
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```env
+VITE_API_BASE_URL=http://localhost:5141/api/v1
 ```
+
+تأكد أن الـ backend يعمل على نفس العنوان، وأن قاعدة البيانات تحتوي على
+`JobTypes` و`JobLevels` و`MockInterviewTypes` حتى تظهر الخيارات في صفحات
+إنشاء الملف وإنشاء المقابلة.
+
+## الصفحات
+
+- `/` — الصفحة الرئيسية أو إنشاء الملف الشخصي إذا لم يوجد `userId` في local storage.
+- `/create-interview` — إنشاء مقابلة جديدة.
+- `/interview/:chatSignature` — غرفة المحادثة مع المدرب + قسم «أسئلة تفاعلية».
+- `/history` — سجل المقابلات.
+- `/results/:mockInterviewId` — نتيجة المقابلة.
+- `/profile` — الملف الشخصي.
+
+## ملاحظات
+
+- يتم حفظ `userId` في `localStorage` تحت المفتاح `mookly.userId`.
+- عند إنشاء المقابلة يتم إنشاء محادثة أولاً، ثم حفظ `chatSignature` والمقابلة.
+- يتم إرسال رسالة معلومات المقابلة تلقائياً كأول رسالة من المستخدم إذا لم تكن
+  قد أُرسلت مسبقاً.
+- قسم «أسئلة تفاعلية» يعرض آخر `Canva` وصل من الـ backend:
+  - `Markdown` يُعرض عبر `marked`.
+  - `HTML` يُنقّى عبر `DOMPurify` ثم يُحقن في الصفحة.
+- عند انتهاء المقابلة يظهر زر الانتقال إلى صفحة النتيجة.

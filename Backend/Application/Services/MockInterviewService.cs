@@ -44,7 +44,7 @@ namespace Application.Services
             if (mockInterview is null)
                 return null;
 
-            mockInterview.eMockInterviewStatus = Enum.Parse<eMockInterviewStatus>(status);
+            mockInterview.eMockInterviewStatus = Enum.Parse<eMockInterviewStatus>(status,true);
 
             await _context.SaveChangesAsync();
 
@@ -66,7 +66,8 @@ namespace Application.Services
                     Status = m.eMockInterviewStatus.ToString(),
                     JobType = m.JobType == null ? null : m.JobType.Name,
                     JobLevel = m.JobLevel == null ? null : m.JobLevel.Name,
-                    About = m.About
+                    About = m.About,
+                    CreatedAt = m.CreatedAt
                 })
                 .FirstOrDefaultAsync();
         }
@@ -86,7 +87,8 @@ namespace Application.Services
                     Status = m.eMockInterviewStatus.ToString(),
                     JobType = m.JobType == null ? null : m.JobType.Name,
                     JobLevel = m.JobLevel == null ? null : m.JobLevel.Name,
-                    About = m.About
+                    About = m.About,
+                    CreatedAt = m.CreatedAt
                 })
                 .ToListAsync();
         }
@@ -107,7 +109,8 @@ namespace Application.Services
                     Status = m.eMockInterviewStatus.ToString(),
                     JobType = m.JobType == null ? null : m.JobType.Name,
                     JobLevel = m.JobLevel == null ? null : m.JobLevel.Name,
-                    About = m.About
+                    About = m.About,
+                    CreatedAt = m.CreatedAt
                 })
                 .FirstOrDefaultAsync();
         }

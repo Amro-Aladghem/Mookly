@@ -40,6 +40,24 @@ namespace Application.Services
             return ToDto(mockInterviewResult);
         }
 
+        public async Task<MockInterviewResultDto?> GetMockInterviewResultByMockInterviewId(Guid userId, Guid mockInterviewId)
+        {
+            return await _context.MockInterviewResults
+                .Where(r => r.MockInterviewId == mockInterviewId && r.MockInterview.UserId == userId)
+                .Select(r => new MockInterviewResultDto
+                {
+                    Id = r.Id,
+                    MockInterviewId = r.MockInterviewId,
+                    OverallScore = r.OverallScore,
+                    Summary = r.Summary,
+                    Strengths = r.Strengths,
+                    AreasForImprovement = r.AreasForImprovement,
+                    Recommendations = r.Recommendations,
+                    CreatedAt = r.CreatedAt
+                })
+                .FirstOrDefaultAsync();
+        }
+
         private static MockInterviewResultDto ToDto(MockInterviewResult r)
         {
             return new MockInterviewResultDto

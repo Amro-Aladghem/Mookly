@@ -1,0 +1,42 @@
+services:
+  api:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: mooklyapi
+    environment:
+      blobconnectionstring: ${blobconnectionstring}
+      SQL_CONNECTION_STRING: ${SQL_CONNECTION_STRING}
+      geminiApi: ${geminiApi}
+      File_Host: ${File_Host}
+      Image_Container: ${Image_Container}
+      File_Cdn: ${File_Cdn}
+    ports:
+      - "5141:5141"
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: ./Frontend/my-app
+      dockerfile: Dockerfile
+    container_name: mooklyfront
+    ports:
+      - "5137:80"
+    depends_on:
+      - api
+
+  database:
+    image: postgres:17
+    container_name: mooklydb
+    environment:
+      POSTGRES_DB: mooklydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

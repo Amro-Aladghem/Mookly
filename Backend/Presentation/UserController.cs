@@ -16,6 +16,7 @@ namespace Presentation
         private readonly NotificationService _notificationService;
         private readonly UserService _userService;
         private readonly MockInterviewService _mockInterviewService;
+        private readonly MockInterviewResultService _mockInterviewResultService;
         private readonly CanvaService _canvaService;
         private readonly Channel<AgentRequestDto> _channel;
 
@@ -24,6 +25,7 @@ namespace Presentation
             NotificationService notificationService,
             UserService userService,
             MockInterviewService mockInterviewService,
+            MockInterviewResultService mockInterviewResultService,
             CanvaService canvaService,
             Channel<AgentRequestDto> channel)
         {
@@ -31,6 +33,7 @@ namespace Presentation
             _notificationService = notificationService;
             _userService = userService;
             _mockInterviewService = mockInterviewService;
+            _mockInterviewResultService = mockInterviewResultService;
             _canvaService = canvaService;
             _channel = channel;
         }
@@ -135,6 +138,34 @@ namespace Presentation
         public async Task<ActionResult<List<GetMockInterviewDto>>> GetMockInterviewsForUser(Guid userId)
         {
             var result = await _mockInterviewService.GetAllMockInterviewsByUserId(userId);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{userId}/mock-interviews/last")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<GetMockInterviewDto>> GetLastMockInterview(Guid userId)
+        {
+            var result = await _mockInterviewService.GetLastMockInterview(userId);
+
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("{userId}/mock-interviews/{mockInterviewId}/result")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<MockInterviewResultDto>> GetMockInterviewResult(Guid userId, Guid mockInterviewId)
+        {
+            var result = await _mockInterviewResultService.GetMockInterviewResultByMockInterviewId(userId, mockInterviewId);
+
+            if (result is null)
+                return NotFound();
 
             return Ok(result);
         }
