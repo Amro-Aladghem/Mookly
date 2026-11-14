@@ -26,17 +26,17 @@ builder.Services.AddSingleton<Channel<AgentRequestDto>>(
 builder.Services.AddScoped<ISpeechToTextService, WhisperService>();
 builder.Services.AddScoped<ITextToSpeechService, PiperService>();
 
-//builder.Services.AddHttpClient<WhisperService>(client =>
-//{
-//    client.BaseAddress = new Uri($"{builder.Configuration["Whisper:Uri"]}:{builder.Configuration["Whisper:Port"]}");
-//    client.Timeout = TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("Whisper:TimeOut"));
-//});
+builder.Services.AddHttpClient<WhisperService>(client =>
+{
+    client.BaseAddress = new Uri($"{builder.Configuration["Whisper:Uri"]}:{builder.Configuration["Whisper:Port"]}");
+    client.Timeout = TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("Whisper:TimeOut"));
+});
 
-//builder.Services.AddHttpClient<PiperService>(client =>
-//{
-//    client.BaseAddress = new Uri($"{builder.Configuration["Piper:Uri"]}:{builder.Configuration["Piper:Port"]}");
-//    client.Timeout = TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("Piper:TimeOut"));
-//});
+builder.Services.AddHttpClient<PiperService>(client =>
+{
+    client.BaseAddress = new Uri($"{builder.Configuration["Piper:Uri"]}:{builder.Configuration["Piper:Port"]}");
+    client.Timeout = TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("Piper:TimeOut"));
+});
 
 var applicationAssembly = typeof(IAgentTool).Assembly;
 var infrastructureAssembly = typeof(AppDbContext).Assembly;

@@ -1,4 +1,5 @@
-import { Bot, Loader2, MessageCircle } from 'lucide-react';
+import { Loader2, MessageCircle } from 'lucide-react';
+import { AgentAvatar } from '@/components/interview/AgentAvatar';
 import { Markdown } from '@/components/ui/Markdown';
 import { resolveMessageText } from '@/libs/chatGrouping';
 import { cn } from '@/libs/cn';
@@ -16,10 +17,8 @@ export function AgentGroup({ group }: AgentGroupProps) {
 
   return (
     <div className="flex justify-start gap-2">
-      <div className="w-9 shrink-0 pt-1">
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-soft text-primary-dark">
-          <Bot size={18} />
-        </span>
+      <div className="shrink-0 pt-1">
+        <AgentAvatar size="sm" />
       </div>
 
       <div className="flex min-w-0 max-w-[88%] flex-col gap-1.5">

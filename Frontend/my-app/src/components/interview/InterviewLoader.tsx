@@ -1,14 +1,12 @@
-import { Bot } from 'lucide-react';
+import { AgentAvatar } from '@/components/interview/AgentAvatar';
 
 export function InterviewLoader() {
   return (
     <div className="flex flex-col items-center justify-center gap-5 rounded-3xl border border-line bg-surface px-6 py-12 text-center">
-      <div className="relative flex h-20 w-20 items-center justify-center">
+      <div className="relative flex h-24 w-24 items-center justify-center">
         <span className="absolute inset-0 rounded-full bg-primary/10 [animation:pulse-ring_1.8s_ease-out_infinite]" />
         <span className="absolute inset-2 rounded-full bg-primary/10 [animation:pulse-ring_1.8s_ease-out_0.45s_infinite]" />
-        <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/20">
-          <Bot size={26} />
-        </span>
+        <AgentAvatar size="xl" ring className="relative shadow-lg shadow-primary/20" />
       </div>
 
       <div>

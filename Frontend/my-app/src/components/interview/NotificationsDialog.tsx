@@ -1,4 +1,5 @@
-import { BellOff, Bot } from 'lucide-react';
+import { BellOff } from 'lucide-react';
+import { AgentAvatar } from '@/components/interview/AgentAvatar';
 import { Dialog } from '@/components/ui/Dialog';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { formatRelative } from '@/libs/format';
@@ -34,8 +35,8 @@ export function NotificationsDialog({
               key={notification.id}
               className="flex gap-3 rounded-xl border border-line bg-surface p-3"
             >
-              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary-dark">
-                <Bot size={16} />
+              <span className="mt-0.5 shrink-0">
+                <AgentAvatar size="sm" />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium text-ink">المدرب الذكي</p>

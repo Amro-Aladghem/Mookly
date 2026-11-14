@@ -10,6 +10,7 @@ import {
   Trophy,
 } from 'lucide-react';
 import { AgentGroup } from '@/components/interview/AgentGroup';
+import { AgentAvatar } from '@/components/interview/AgentAvatar';
 import { CanvaPanel } from '@/components/interview/CanvaPanel';
 import { ChatComposer } from '@/components/interview/ChatComposer';
 import { InterviewLoader } from '@/components/interview/InterviewLoader';
@@ -214,9 +215,7 @@ export function InterviewView() {
         <section className="flex h-[calc(100dvh-170px)] min-h-[560px] flex-col overflow-hidden rounded-2xl border border-line bg-surface">
           <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
             <div className="flex min-w-0 items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-soft text-primary-dark">
-                <Trophy size={17} />
-              </span>
+              <AgentAvatar size="sm" />
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-ink">غرفة المقابلة</p>
                 <p className="truncate text-[11px] text-muted">
