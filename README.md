@@ -4,6 +4,8 @@ Mookly is an AI-powered mock-interview platform. You create a profile, pick a jo
 
 The whole experience is in Arabic (RTL), with a calm dark-navy visual identity.
 
+<img width="1280" height="720" alt="وكيل ذكاء اصطناعي للتدرب على المقابلات الشخصية" src="https://github.com/user-attachments/assets/5145c4d0-88d7-4577-8df7-48c9cd86f100" />
+
 ## 1. What Mookly Does
 
 - Creates a user profile with first name, last name, about, job type, and job level.
@@ -257,4 +259,4 @@ Key behaviors:
 
 Contributions are welcome! Feel free to open a pull request: fork the repo, create a feature branch, commit your changes, and describe your PR clearly.
 
-Author: Mookly Team
+Author: Amro Aladghem
